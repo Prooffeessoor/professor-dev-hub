@@ -1,0 +1,92 @@
+[
+  {
+    "id": "html-1",
+    "category": "HTML",
+    "term": "What does HTML stand for?",
+    "answer": "HyperText Markup Language"
+  },
+  {
+    "id": "html-2",
+    "category": "HTML",
+    "term": "Which tag creates a hyperlink?",
+    "answer": "<a> (anchor tag)"
+  },
+  {
+    "id": "html-3",
+    "category": "HTML",
+    "term": "What is the purpose of the <alt> attribute on images?",
+    "answer": "Provides alternative text for accessibility and when the image cannot be displayed"
+  },
+  {
+    "id": "html-4",
+    "category": "HTML",
+    "term": "Name three semantic HTML elements",
+    "answer": "<header>, <nav>, <main>, <section>, <article>, <footer>, <aside>"
+  },
+  {
+    "id": "html-5",
+    "category": "HTML",
+    "term": "What is the difference between <div> and <span>?",
+    "answer": "<div> is a block-level container, <span> is an inline container"
+  },
+  {
+    "id": "css-1",
+    "category": "CSS",
+    "term": "What does CSS stand for?",
+    "answer": "Cascading Style Sheets"
+  },
+  {
+    "id": "css-2",
+    "category": "CSS",
+    "term": "What are the four parts of the CSS Box Model?",
+    "answer": "Content, Padding, Border, Margin"
+  },
+  {
+    "id": "css-3",
+    "category": "CSS",
+    "term": "Which property makes an element a flex container?",
+    "answer": "display: flex;"
+  },
+  {
+    "id": "css-4",
+    "category": "CSS",
+    "term": "What does justify-content control in Flexbox?",
+    "answer": "Alignment of items along the main axis"
+  },
+  {
+    "id": "css-5",
+    "category": "CSS",
+    "term": "What is the recommended global box-sizing value?",
+    "answer": "box-sizing: border-box;"
+  },
+  {
+    "id": "css-6",
+    "category": "CSS",
+    "term": "How do you create a 3-column equal-width grid?",
+    "answer": "display: grid; grid-template-columns: repeat(3, 1fr);"
+  },
+  {
+    "id": "js-1",
+    "category": "JavaScript",
+    "term": "How do you declare a constant in modern JavaScript?",
+    "answer": "const variableName = value;"
+  },
+  {
+    "id": "js-2",
+    "category": "JavaScript",
+    "term": "What does DOM stand for?",
+    "answer": "Document Object Model"
+  },
+  {
+    "id": "js-3",
+    "category": "JavaScript",
+    "term": "Which method selects an element by its ID?",
+    "answer": "document.getElementById('id')"
+  },
+  {
+    "id": "js-4",
+    "category": "JavaScript",
+    "term": "What is the difference between == and ===?",
+    "answer": "== compares value with type coercion, === compares value and type strictly"
+  }
+]

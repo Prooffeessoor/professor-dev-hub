@@ -1,0 +1,142 @@
+[
+  {
+    "id": "html-basics",
+    "title": "HTML Basics",
+    "icon": "📄",
+    "questions": [
+      {
+        "question": "What does HTML stand for?",
+        "options": [
+          "HyperText Markup Language",
+          "High Tech Modern Language",
+          "Hyper Transfer Markup Language",
+          "Home Tool Markup Language"
+        ],
+        "correct": 0,
+        "explanation": "HTML stands for HyperText Markup Language — the standard language for creating web pages."
+      },
+      {
+        "question": "Which tag is used to create a hyperlink?",
+        "options": ["<link>", "<a>", "<href>", "<url>"],
+        "correct": 1,
+        "explanation": "The <a> (anchor) tag is used to create hyperlinks."
+      },
+      {
+        "question": "Which of these is a semantic HTML element?",
+        "options": ["<div>", "<span>", "<article>", "<b>"],
+        "correct": 2,
+        "explanation": "<article> is semantic — it clearly describes its content. <div> and <span> are generic."
+      },
+      {
+        "question": "What attribute provides alternative text for an image?",
+        "options": ["title", "alt", "src", "description"],
+        "correct": 1,
+        "explanation": "The alt attribute provides alternative text for accessibility and when images fail to load."
+      },
+      {
+        "question": "Which tag contains the visible content of a webpage?",
+        "options": ["<head>", "<body>", "<html>", "<meta>"],
+        "correct": 1,
+        "explanation": "The <body> tag contains all the visible content of the webpage."
+      }
+    ]
+  },
+  {
+    "id": "css-basics",
+    "title": "CSS Basics",
+    "icon": "🎨",
+    "questions": [
+      {
+        "question": "What does CSS stand for?",
+        "options": [
+          "Computer Style Sheets",
+          "Cascading Style Sheets",
+          "Creative Style System",
+          "Colorful Style Sheets"
+        ],
+        "correct": 1,
+        "explanation": "CSS stands for Cascading Style Sheets."
+      },
+      {
+        "question": "Which property is used to change text color?",
+        "options": ["font-color", "text-color", "color", "foreground"],
+        "correct": 2,
+        "explanation": "The color property sets the text color."
+      },
+      {
+        "question": "What are the four parts of the CSS Box Model (from inside out)?",
+        "options": [
+          "Margin, Border, Padding, Content",
+          "Content, Padding, Border, Margin",
+          "Border, Margin, Padding, Content",
+          "Padding, Content, Margin, Border"
+        ],
+        "correct": 1,
+        "explanation": "The correct order is Content → Padding → Border → Margin."
+      },
+      {
+        "question": "Which value of display creates a flex container?",
+        "options": ["block", "inline", "flex", "grid"],
+        "correct": 2,
+        "explanation": "display: flex; turns an element into a flex container."
+      },
+      {
+        "question": "What does justify-content control in Flexbox?",
+        "options": [
+          "Alignment on the cross axis",
+          "Alignment on the main axis",
+          "The direction of flex items",
+          "The size of flex items"
+        ],
+        "correct": 1,
+        "explanation": "justify-content aligns items along the main axis."
+      }
+    ]
+  },
+  {
+    "id": "js-intro",
+    "title": "JavaScript Intro",
+    "icon": "⚡",
+    "questions": [
+      {
+        "question": "How do you declare a constant in modern JavaScript?",
+        "options": ["var x = 5;", "let x = 5;", "const x = 5;", "constant x = 5;"],
+        "correct": 2,
+        "explanation": "const is used to declare constants that cannot be reassigned."
+      },
+      {
+        "question": "What does DOM stand for?",
+        "options": [
+          "Document Object Model",
+          "Data Object Management",
+          "Digital Ordinance Model",
+          "Document Orientation Mode"
+        ],
+        "correct": 0,
+        "explanation": "DOM stands for Document Object Model — the programming interface for HTML documents."
+      },
+      {
+        "question": "Which method selects an element by its ID?",
+        "options": [
+          "document.querySelector('#id')",
+          "document.getElementById('id')",
+          "Both of the above",
+          "document.getElement('id')"
+        ],
+        "correct": 2,
+        "explanation": "Both getElementById and querySelector('#id') can select an element by ID."
+      },
+      {
+        "question": "What is the difference between == and ===?",
+        "options": [
+          "No difference",
+          "== is strict, === is loose",
+          "== compares value only (with coercion), === compares value and type",
+          "=== is deprecated"
+        ],
+        "correct": 2,
+        "explanation": "=== is the strict equality operator — it checks both value and type without coercion."
+      }
+    ]
+  }
+]
