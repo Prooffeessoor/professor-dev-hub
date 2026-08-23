@@ -1,0 +1,74 @@
+[
+  {
+    "id": "ch-sum",
+    "title": "Sum of Array",
+    "icon": "➕",
+    "level": "Easy",
+    "topic": "JavaScript",
+    "prompt": "Write a function sum(arr) that returns the sum of all numbers in the array.",
+    "example": "sum([1, 2, 3]) → 6",
+    "hint": "Use a loop or Array.reduce",
+    "starter": "function sum(arr) {\n  // your code\n}",
+    "solution": "function sum(arr) {\n  return arr.reduce((a, b) => a + b, 0);\n}"
+  },
+  {
+    "id": "ch-palindrome",
+    "title": "Palindrome Check",
+    "icon": "🔁",
+    "level": "Easy",
+    "topic": "JavaScript",
+    "prompt": "Write isPalindrome(str) that returns true if the string reads the same forwards and backwards (ignore case).",
+    "example": "isPalindrome('RaceCar') → true",
+    "hint": "Normalize to lower case, then compare with the reversed string",
+    "starter": "function isPalindrome(str) {\n  // your code\n}",
+    "solution": "function isPalindrome(str) {\n  const s = str.toLowerCase();\n  return s === s.split('').reverse().join('');\n}"
+  },
+  {
+    "id": "ch-fizzbuzz",
+    "title": "FizzBuzz",
+    "icon": "buzz",
+    "level": "Easy",
+    "topic": "JavaScript",
+    "prompt": "Print numbers 1 to 30. For multiples of 3 print Fizz, of 5 print Buzz, of both print FizzBuzz.",
+    "example": "3 → Fizz, 5 → Buzz, 15 → FizzBuzz",
+    "hint": "Use % (modulo) to test divisibility",
+    "starter": "for (let i = 1; i <= 30; i++) {\n  // your code\n}",
+    "solution": "for (let i = 1; i <= 30; i++) {\n  if (i % 15 === 0) console.log('FizzBuzz');\n  else if (i % 3 === 0) console.log('Fizz');\n  else if (i % 5 === 0) console.log('Buzz');\n  else console.log(i);\n}"
+  },
+  {
+    "id": "ch-py-max",
+    "title": "Find Maximum",
+    "icon": "🐍",
+    "level": "Easy",
+    "topic": "Python",
+    "prompt": "Write a function max_of_three(a, b, c) that returns the largest of three numbers without using max().",
+    "example": "max_of_three(3, 9, 5) → 9",
+    "hint": "Compare with if / elif",
+    "starter": "def max_of_three(a, b, c):\n    # your code\n    pass",
+    "solution": "def max_of_three(a, b, c):\n    if a >= b and a >= c:\n        return a\n    elif b >= c:\n        return b\n    else:\n        return c"
+  },
+  {
+    "id": "ch-reverse",
+    "title": "Reverse a String",
+    "icon": "◀️",
+    "level": "Easy",
+    "topic": "JavaScript",
+    "prompt": "Write reverse(str) that returns the string reversed.",
+    "example": "reverse('hello') → 'olleh'",
+    "hint": "split → reverse → join",
+    "starter": "function reverse(str) {\n  // your code\n}",
+    "solution": "function reverse(str) {\n  return str.split('').reverse().join('');\n}"
+  },
+  {
+    "id": "ch-count-vowels",
+    "title": "Count Vowels",
+    "icon": "🔤",
+    "level": "Easy",
+    "topic": "JavaScript",
+    "prompt": "Write countVowels(str) that returns how many vowels (a,e,i,o,u) are in the string (case-insensitive).",
+    "example": "countVowels('Hello') → 2",
+    "hint": "Loop through characters and check against 'aeiou'",
+    "starter": "function countVowels(str) {\n  // your code\n}",
+    "solution": "function countVowels(str) {\n  return [...str.toLowerCase()].filter(c => 'aeiou'.includes(c)).length;\n}"
+  }
+]

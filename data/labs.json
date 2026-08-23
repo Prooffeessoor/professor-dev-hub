@@ -1,0 +1,94 @@
+[
+  {
+    "id": "lab-html-card",
+    "title": "Build a Profile Card",
+    "icon": "🪪",
+    "level": "Beginner",
+    "topic": "HTML/CSS",
+    "time": "20 min",
+    "goal": "Create a responsive profile card with avatar, name, bio, and social links.",
+    "steps": [
+      "Create an HTML file with a container div for the card",
+      "Add an image (or emoji avatar), h2 name, and a short bio paragraph",
+      "Add two links (e.g. GitHub and Portfolio) using <a> tags",
+      "Style the card with CSS: centered, rounded corners, soft shadow",
+      "Use Flexbox to align content vertically",
+      "Make it look good on mobile (max-width + padding)"
+    ],
+    "hint": "Use border-radius, box-shadow, and display: flex; flex-direction: column; align-items: center;",
+    "solution": "A simple card uses a div.card with padding 1.5rem, border-radius 16px, and a max-width of 320px centered with margin: 0 auto."
+  },
+  {
+    "id": "lab-flex-nav",
+    "title": "Responsive Navbar",
+    "icon": "🧭",
+    "level": "Beginner",
+    "topic": "CSS Flexbox",
+    "time": "25 min",
+    "goal": "Build a top navigation bar with logo on the left and links on the right.",
+    "steps": [
+      "Create a <nav> with a logo span and a list of links",
+      "Set display: flex; justify-content: space-between; align-items: center",
+      "Style links with gap and remove default list styles",
+      "Add a background color and padding",
+      "On small screens, stack or hide links (optional media query)"
+    ],
+    "hint": "nav { display: flex; justify-content: space-between; align-items: center; }",
+    "solution": "Flexbox on the nav with space-between places logo left and menu right. Use gap on the links container."
+  },
+  {
+    "id": "lab-fetch-users",
+    "title": "Fetch & Display Users",
+    "icon": "🔌",
+    "level": "Intermediate",
+    "topic": "JavaScript / API",
+    "time": "30 min",
+    "goal": "Fetch data from a public API and render a list of users.",
+    "steps": [
+      "Create a page with an empty <ul id=\"users\"> and a Load button",
+      "On click, fetch('https://jsonplaceholder.typicode.com/users')",
+      "Parse JSON with await res.json()",
+      "Map each user to an <li> showing name and email",
+      "Handle errors with try/catch and show a message if offline"
+    ],
+    "hint": "const res = await fetch(url); const data = await res.json();",
+    "solution": "Use async/await, check res.ok, then users.forEach(u => list.innerHTML += `<li>${u.name} — ${u.email}</li>`)."
+  },
+  {
+    "id": "lab-python-todo",
+    "title": "Python Todo List (CLI)",
+    "icon": "🐍",
+    "level": "Beginner",
+    "topic": "Python",
+    "time": "25 min",
+    "goal": "Build a command-line todo app that can add, list, and remove tasks.",
+    "steps": [
+      "Create a list called todos = []",
+      "Print a menu: 1. Add  2. List  3. Remove  4. Quit",
+      "On Add: input a task and append to todos",
+      "On List: enumerate and print all tasks",
+      "On Remove: ask for index and pop that item",
+      "Loop until the user chooses Quit"
+    ],
+    "hint": "Use a while True loop and input() for the choice.",
+    "solution": "while True: show menu; if choice == '1': todos.append(input('Task: ')); elif choice == '2': print list; elif choice == '4': break."
+  },
+  {
+    "id": "lab-flask-hello",
+    "title": "Hello API with Flask",
+    "icon": "🚀",
+    "level": "Intermediate",
+    "topic": "Python / API",
+    "time": "30 min",
+    "goal": "Create a tiny Flask API with GET /hello and POST /echo.",
+    "steps": [
+      "pip install flask",
+      "Create app.py with Flask(__name__)",
+      "Add @app.get('/hello') returning JSON { message: 'Hello' }",
+      "Add @app.post('/echo') that returns the JSON body you sent",
+      "Run with python app.py and test in browser or with fetch"
+    ],
+    "hint": "from flask import Flask, jsonify, request",
+    "solution": "@app.post('/echo')\ndef echo():\n    return jsonify(request.get_json())"
+  }
+]

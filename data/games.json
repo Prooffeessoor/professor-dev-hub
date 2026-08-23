@@ -1,0 +1,18 @@
+[
+  {
+    "id": "match-terms",
+    "title": "Term Match",
+    "icon": "🎯",
+    "description": "Match programming terms with their definitions. Clear the board as fast as you can.",
+    "pairs": [
+      { "term": "HTML", "def": "Markup language for web pages" },
+      { "term": "CSS", "def": "Styles the look of a page" },
+      { "term": "API", "def": "Interface between software systems" },
+      { "term": "DOM", "def": "Document Object Model tree" },
+      { "term": "JSON", "def": "Lightweight data format" },
+      { "term": "GET", "def": "HTTP method to read data" },
+      { "term": "Flexbox", "def": "One-dimensional CSS layout" },
+      { "term": "Git", "def": "Version control system" }
+    ]
+  }
+]
