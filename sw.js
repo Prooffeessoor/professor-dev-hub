@@ -1,6 +1,6 @@
 /* Professor Dev Hub - Service Worker */
 
-const CACHE_VERSION = 'dev-hub-v1.3.0';
+const CACHE_VERSION = 'dev-hub-v1.4.0';
 const CACHE_NAME = `professor-dev-hub-${CACHE_VERSION}`;
 
 const PRECACHE_URLS = [
@@ -29,13 +29,13 @@ self.addEventListener('install', (event) => {
 
 self.addEventListener('activate', (event) => {
   event.waitUntil(
-    caches.keys().then((cacheNames) => {
-      return Promise.all(
+    caches.keys().then((cacheNames) =>
+      Promise.all(
         cacheNames
           .filter((name) => name.startsWith('professor-dev-hub-') && name !== CACHE_NAME)
           .map((name) => caches.delete(name))
-      );
-    }).then(() => self.clients.claim())
+      )
+    ).then(() => self.clients.claim())
   );
 });
 
@@ -57,8 +57,8 @@ self.addEventListener('fetch', (event) => {
 
       return fetch(event.request).then((response) => {
         if (!response || response.status !== 200 || response.type !== 'basic') return response;
-        const responseToCache = response.clone();
-        caches.open(CACHE_NAME).then((cache) => cache.put(event.request, responseToCache));
+        const clone = response.clone();
+        caches.open(CACHE_NAME).then((cache) => cache.put(event.request, clone));
         return response;
       }).catch(() => {
         if (event.request.mode === 'navigate') return caches.match('./index.html');
@@ -70,10 +70,4 @@ self.addEventListener('fetch', (event) => {
 
 self.addEventListener('message', (event) => {
   if (event.data && event.data.type === 'SKIP_WAITING') self.skipWaiting();
-});
-
-self.addEventListener('sync', (event) => {
-  if (event.tag === 'sync-progress' || event.tag === 'sync-notes') {
-    event.waitUntil(Promise.resolve());
-  }
 });

@@ -1,13 +1,13 @@
 /* Professor Dev Hub - Main Application Logic */
 
-// ========== State ==========
 let FLASHCARDS = [];
 let QUIZZES = [];
 let currentCardIndex = 0;
-let dueCards = [];          // cards currently due for review
+let dueCards = [];
 let currentQuiz = null;
 let currentQuestionIndex = 0;
 let quizScore = 0;
+let deferredInstallPrompt = null;
 
 // ========== Navigation ==========
 function showPage(pageId) {
@@ -64,7 +64,7 @@ async function loadProgress() {
   document.getElementById('stat-quizzes').textContent = progress.quizzesTaken || 0;
   document.getElementById('stat-cards').textContent = progress.cardsSeen || 0;
 
-  const total = 30;
+  const total = 40;
   const completed = (progress.chaptersCompleted || 0) + (progress.quizzesTaken || 0) + Math.floor((progress.cardsSeen || 0) / 5);
   const percent = Math.min(100, Math.round((completed / total) * 100));
   document.getElementById('overall-fill').style.width = percent + '%';
@@ -83,21 +83,47 @@ async function loadJSON(url) {
   }
 }
 
+// ========== Install Prompt (PWA) ==========
+window.addEventListener('beforeinstallprompt', (e) => {
+  e.preventDefault();
+  deferredInstallPrompt = e;
+  const btn = document.getElementById('installBtn');
+  if (btn) btn.classList.remove('hidden');
+});
+
+document.getElementById('installBtn')?.addEventListener('click', async () => {
+  if (!deferredInstallPrompt) return;
+  deferredInstallPrompt.prompt();
+  const { outcome } = await deferredInstallPrompt.userChoice;
+  if (outcome === 'accepted') {
+    document.getElementById('installBtn')?.classList.add('hidden');
+  }
+  deferredInstallPrompt = null;
+});
+
+window.addEventListener('appinstalled', () => {
+  document.getElementById('installBtn')?.classList.add('hidden');
+  deferredInstallPrompt = null;
+});
+
 // ========== Learning Paths ==========
 function renderPathsList() {
   const container = document.getElementById('paths-container');
   if (!container || !window.LEARNING_PATHS) return;
 
-  container.innerHTML = window.LEARNING_PATHS.map(path => `
-    <div class="path-card" data-path-id="${path.id}">
-      <div class="path-icon" style="background:${path.color}22;color:${path.color}">${path.icon}</div>
-      <div class="path-info">
-        <h3>${path.title}</h3>
-        <p>${path.description}</p>
-        <span class="tag">${path.lessons.length} lessons</span>
+  container.innerHTML = `
+    <h2 class="section-title">📚 Learning Paths</h2>
+    ${window.LEARNING_PATHS.map(path => `
+      <div class="path-card" data-path-id="${path.id}">
+        <div class="path-icon" style="background:${path.color}22;color:${path.color}">${path.icon}</div>
+        <div class="path-info">
+          <h3>${path.title}</h3>
+          <p>${path.description}</p>
+          <span class="tag">${path.lessons.length} lessons</span>
+        </div>
       </div>
-    </div>
-  `).join('');
+    `).join('')}
+  `;
 
   container.querySelectorAll('.path-card').forEach(card => {
     card.addEventListener('click', () => openPath(card.dataset.pathId));
@@ -150,30 +176,28 @@ function openLesson(pathId, lessonId) {
     progress.chaptersCompleted = (progress.chaptersCompleted || 0) + 1;
     await DevHubDB.saveProgress(progress);
     await loadProgress();
-    alert('Lesson marked as complete!');
+    const btn = document.getElementById('markComplete');
+    btn.textContent = 'Completed ✓';
+    btn.disabled = true;
   });
 }
 
-// ========== Study Cards + Spaced Repetition ==========
+// ========== Study Cards + SRS ==========
 async function buildDueCards(category = 'all') {
   const source = category === 'all' ? FLASHCARDS : FLASHCARDS.filter(c => c.category === category);
   const due = [];
 
   for (const card of source) {
     const srs = await DevHubDB.getCardSRS(card.id);
-    if (SRS.isDue(srs)) {
-      due.push({ ...card, srs });
-    }
+    if (SRS.isDue(srs)) due.push({ ...card, srs });
   }
 
-  // If nothing is due, show all cards so the user can still study
   if (due.length === 0) {
     for (const card of source) {
       const srs = await DevHubDB.getCardSRS(card.id);
       due.push({ ...card, srs });
     }
   }
-
   return due;
 }
 
@@ -184,7 +208,7 @@ async function renderCardsPage() {
   dueCards = await buildDueCards('all');
   currentCardIndex = 0;
 
-  if (dueCards.length === 0) {
+  if (!dueCards.length) {
     container.innerHTML = '<p class="empty-state">No cards loaded yet.</p>';
     return;
   }
@@ -193,13 +217,16 @@ async function renderCardsPage() {
     <div class="cards-header">
       <div class="card-counter">
         <span id="card-num">1</span> / <span id="card-total">${dueCards.length}</span>
-        <span class="due-label" id="due-label">• Due now</span>
+        <span class="due-label">• SRS</span>
       </div>
       <select id="card-filter" class="filter-select">
-        <option value="all">All Categories</option>
+        <option value="all">All</option>
         <option value="HTML">HTML</option>
         <option value="CSS">CSS</option>
         <option value="JavaScript">JavaScript</option>
+        <option value="Python">Python</option>
+        <option value="API">API</option>
+        <option value="C#">C#</option>
       </select>
     </div>
 
@@ -231,14 +258,11 @@ async function renderCardsPage() {
   `;
 
   showCard(0);
-
   document.getElementById('flashcard').addEventListener('click', onFlip);
   document.getElementById('flipCard').addEventListener('click', onFlip);
-
   document.querySelectorAll('.rating-btn').forEach(btn => {
     btn.addEventListener('click', () => rateCard(parseInt(btn.dataset.quality)));
   });
-
   document.getElementById('card-filter').addEventListener('change', async (e) => {
     dueCards = await buildDueCards(e.target.value);
     currentCardIndex = 0;
@@ -250,7 +274,6 @@ async function renderCardsPage() {
 function showCard(index) {
   if (!dueCards.length) return;
   const card = dueCards[index];
-
   document.getElementById('card-num').textContent = index + 1;
   document.getElementById('card-category').textContent = card.category;
   document.getElementById('card-term').textContent = card.term;
@@ -262,8 +285,7 @@ function showCard(index) {
 }
 
 function onFlip() {
-  const cardEl = document.getElementById('flashcard');
-  cardEl.classList.add('flipped');
+  document.getElementById('flashcard').classList.add('flipped');
   document.getElementById('srs-rating').classList.remove('hidden');
   document.getElementById('card-controls').classList.add('hidden');
 }
@@ -272,45 +294,32 @@ async function rateCard(quality) {
   const card = dueCards[currentCardIndex];
   if (!card) return;
 
-  // Run SM-2 algorithm
   const updatedSRS = SRS.review(card.srs, quality);
   await DevHubDB.saveCardSRS(updatedSRS);
 
-  // Update progress
   const progress = await DevHubDB.getProgress();
   progress.cardsSeen = (progress.cardsSeen || 0) + 1;
   await DevHubDB.saveProgress(progress);
   await loadProgress();
 
-  // Show next interval briefly
-  const intervalText = SRS.formatInterval(updatedSRS.interval);
-  document.getElementById('next-interval').textContent = `Next review: ${intervalText}`;
+  document.getElementById('next-interval').textContent = `Next review: ${SRS.formatInterval(updatedSRS.interval)}`;
 
-  // Move to next card after a short delay
   setTimeout(async () => {
-    // Remove current card from due list if it is no longer due
-    if (!SRS.isDue(updatedSRS)) {
-      dueCards.splice(currentCardIndex, 1);
-    } else {
-      // Keep it but update its srs data
+    if (!SRS.isDue(updatedSRS)) dueCards.splice(currentCardIndex, 1);
+    else {
       dueCards[currentCardIndex].srs = updatedSRS;
       currentCardIndex++;
     }
-
-    if (currentCardIndex >= dueCards.length) {
-      currentCardIndex = 0;
-    }
+    if (currentCardIndex >= dueCards.length) currentCardIndex = 0;
 
     if (dueCards.length === 0) {
-      // Rebuild to show remaining / all cards
       const filter = document.getElementById('card-filter')?.value || 'all';
       dueCards = await buildDueCards(filter);
       currentCardIndex = 0;
     }
-
     document.getElementById('card-total').textContent = dueCards.length;
     showCard(currentCardIndex);
-  }, 600);
+  }, 550);
 }
 
 // ========== Quizzes ==========
@@ -416,11 +425,7 @@ async function showQuizResults() {
   const percent = Math.round((quizScore / total) * 100);
 
   await DevHubDB.saveQuizResult({
-    quizId: currentQuiz.id,
-    title: currentQuiz.title,
-    score: quizScore,
-    total,
-    percent
+    quizId: currentQuiz.id, title: currentQuiz.title, score: quizScore, total, percent
   });
 
   const progress = await DevHubDB.getProgress();
@@ -443,7 +448,7 @@ async function showQuizResults() {
   document.getElementById('backToQuizzes').addEventListener('click', renderQuizzesList);
 }
 
-// ========== Offline + Update Detection ==========
+// ========== Offline + SW ==========
 function updateOnlineStatus() {
   const offlineBanner = document.getElementById('offline-banner');
   if (!navigator.onLine) offlineBanner?.classList.add('show');
@@ -492,10 +497,7 @@ window.addEventListener('online', () => {
 document.addEventListener('DOMContentLoaded', async () => {
   await initTheme();
   await loadProgress();
-
   FLASHCARDS = await loadJSON('./data/flashcards.json');
   QUIZZES = await loadJSON('./data/quizzes.json');
-
-  console.log('Professor Dev Hub ready 🚀');
-  console.log(`Loaded ${FLASHCARDS.length} cards & ${QUIZZES.length} quizzes`);
+  console.log(`Professor Dev Hub ready 🚀 — ${FLASHCARDS.length} cards, ${QUIZZES.length} quizzes, ${window.LEARNING_PATHS?.length || 0} paths`);
 });
