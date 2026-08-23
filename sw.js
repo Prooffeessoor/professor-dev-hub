@@ -1,8 +1,6 @@
-/* Professor Dev Hub - Service Worker
-   Versioned caching + update detection + offline support
-*/
+/* Professor Dev Hub - Service Worker */
 
-const CACHE_VERSION = 'dev-hub-v1.1.0';
+const CACHE_VERSION = 'dev-hub-v1.2.0';
 const CACHE_NAME = `professor-dev-hub-${CACHE_VERSION}`;
 
 const PRECACHE_URLS = [
@@ -14,6 +12,8 @@ const PRECACHE_URLS = [
   './app.js',
   './styles.css',
   './data/paths.js',
+  './data/flashcards.json',
+  './data/quizzes.json',
   './icon-192.svg',
   './icon-512.svg'
 ];
@@ -39,9 +39,7 @@ self.addEventListener('activate', (event) => {
 });
 
 self.addEventListener('fetch', (event) => {
-  if (event.request.method !== 'GET' || !event.request.url.startsWith(self.location.origin)) {
-    return;
-  }
+  if (event.request.method !== 'GET' || !event.request.url.startsWith(self.location.origin)) return;
 
   event.respondWith(
     caches.match(event.request).then((cached) => {
@@ -57,16 +55,12 @@ self.addEventListener('fetch', (event) => {
       }
 
       return fetch(event.request).then((response) => {
-        if (!response || response.status !== 200 || response.type !== 'basic') {
-          return response;
-        }
+        if (!response || response.status !== 200 || response.type !== 'basic') return response;
         const responseToCache = response.clone();
         caches.open(CACHE_NAME).then((cache) => cache.put(event.request, responseToCache));
         return response;
       }).catch(() => {
-        if (event.request.mode === 'navigate') {
-          return caches.match('./index.html');
-        }
+        if (event.request.mode === 'navigate') return caches.match('./index.html');
         return new Response('Offline', { status: 503, statusText: 'Service Unavailable' });
       });
     })
@@ -74,17 +68,11 @@ self.addEventListener('fetch', (event) => {
 });
 
 self.addEventListener('message', (event) => {
-  if (event.data && event.data.type === 'SKIP_WAITING') {
-    self.skipWaiting();
-  }
+  if (event.data && event.data.type === 'SKIP_WAITING') self.skipWaiting();
 });
 
 self.addEventListener('sync', (event) => {
   if (event.tag === 'sync-progress' || event.tag === 'sync-notes') {
-    event.waitUntil(handleBackgroundSync(event.tag));
+    event.waitUntil(Promise.resolve());
   }
 });
-
-async function handleBackgroundSync(tag) {
-  console.log('[SW] Background sync triggered:', tag);
-}
