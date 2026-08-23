@@ -4,22 +4,18 @@
 let FLASHCARDS = [];
 let QUIZZES = [];
 let currentCardIndex = 0;
-let filteredCards = [];
+let dueCards = [];          // cards currently due for review
 let currentQuiz = null;
 let currentQuestionIndex = 0;
 let quizScore = 0;
-let quizAnswers = [];
 
 // ========== Navigation ==========
 function showPage(pageId) {
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-  document.querySelectorAll('.nav-link, .bottom-nav-item, .feature-card').forEach(el => {
-    el.classList.remove('active');
-  });
+  document.querySelectorAll('.nav-link, .bottom-nav-item, .feature-card').forEach(el => el.classList.remove('active'));
 
   const page = document.getElementById(`page-${pageId}`);
   if (page) page.classList.add('active');
-
   document.querySelectorAll(`[data-page="${pageId}"]`).forEach(el => el.classList.add('active'));
 
   document.getElementById('sidebar')?.classList.remove('open');
@@ -34,7 +30,6 @@ document.querySelectorAll('[data-page]').forEach(el => {
   el.addEventListener('click', () => showPage(el.dataset.page));
 });
 
-// Sidebar
 document.getElementById('menuBtn')?.addEventListener('click', () => {
   document.getElementById('sidebar').classList.add('open');
   document.getElementById('overlay').classList.add('show');
@@ -77,7 +72,6 @@ async function loadProgress() {
   document.getElementById('streak-badge').textContent = `🔥 ${progress.streak || 0} day streak`;
 }
 
-// ========== Data Loading ==========
 async function loadJSON(url) {
   try {
     const res = await fetch(url);
@@ -89,7 +83,7 @@ async function loadJSON(url) {
   }
 }
 
-// ========== Learning Paths (kept from before) ==========
+// ========== Learning Paths ==========
 function renderPathsList() {
   const container = document.getElementById('paths-container');
   if (!container || !window.LEARNING_PATHS) return;
@@ -160,22 +154,47 @@ function openLesson(pathId, lessonId) {
   });
 }
 
-// ========== Study Cards ==========
-function renderCardsPage() {
+// ========== Study Cards + Spaced Repetition ==========
+async function buildDueCards(category = 'all') {
+  const source = category === 'all' ? FLASHCARDS : FLASHCARDS.filter(c => c.category === category);
+  const due = [];
+
+  for (const card of source) {
+    const srs = await DevHubDB.getCardSRS(card.id);
+    if (SRS.isDue(srs)) {
+      due.push({ ...card, srs });
+    }
+  }
+
+  // If nothing is due, show all cards so the user can still study
+  if (due.length === 0) {
+    for (const card of source) {
+      const srs = await DevHubDB.getCardSRS(card.id);
+      due.push({ ...card, srs });
+    }
+  }
+
+  return due;
+}
+
+async function renderCardsPage() {
   const container = document.getElementById('cards-container');
   if (!container) return;
 
-  filteredCards = [...FLASHCARDS];
+  dueCards = await buildDueCards('all');
   currentCardIndex = 0;
 
-  if (filteredCards.length === 0) {
+  if (dueCards.length === 0) {
     container.innerHTML = '<p class="empty-state">No cards loaded yet.</p>';
     return;
   }
 
   container.innerHTML = `
     <div class="cards-header">
-      <div class="card-counter">Card <span id="card-num">1</span> of ${filteredCards.length}</div>
+      <div class="card-counter">
+        <span id="card-num">1</span> / <span id="card-total">${dueCards.length}</span>
+        <span class="due-label" id="due-label">• Due now</span>
+      </div>
       <select id="card-filter" class="filter-select">
         <option value="all">All Categories</option>
         <option value="HTML">HTML</option>
@@ -188,59 +207,110 @@ function renderCardsPage() {
       <div class="flashcard-face flashcard-front">
         <div class="card-category" id="card-category">HTML</div>
         <div class="card-term" id="card-term">Loading...</div>
-        <div class="card-hint">Tap to flip</div>
+        <div class="card-hint">Tap to reveal answer</div>
       </div>
       <div class="flashcard-face flashcard-back">
         <div class="card-answer" id="card-answer">Loading...</div>
       </div>
     </div>
 
-    <div class="card-controls">
-      <button class="btn btn-secondary" id="prevCard">← Prev</button>
-      <button class="btn btn-primary" id="flipCard">Flip</button>
-      <button class="btn btn-secondary" id="nextCard">Next →</button>
+    <div class="srs-rating hidden" id="srs-rating">
+      <p class="rating-prompt">How well did you know this?</p>
+      <div class="rating-buttons">
+        <button class="btn rating-btn again" data-quality="0">Again</button>
+        <button class="btn rating-btn hard" data-quality="1">Hard</button>
+        <button class="btn rating-btn good" data-quality="2">Good</button>
+        <button class="btn rating-btn easy" data-quality="3">Easy</button>
+      </div>
+      <div class="next-interval" id="next-interval"></div>
+    </div>
+
+    <div class="card-controls" id="card-controls">
+      <button class="btn btn-primary" id="flipCard">Show Answer</button>
     </div>
   `;
 
   showCard(0);
 
-  document.getElementById('flashcard').addEventListener('click', flipCard);
-  document.getElementById('flipCard').addEventListener('click', flipCard);
-  document.getElementById('prevCard').addEventListener('click', () => {
-    currentCardIndex = (currentCardIndex - 1 + filteredCards.length) % filteredCards.length;
-    showCard(currentCardIndex);
-  });
-  document.getElementById('nextCard').addEventListener('click', async () => {
-    currentCardIndex = (currentCardIndex + 1) % filteredCards.length;
-    showCard(currentCardIndex);
-    // Track cards seen
-    const progress = await DevHubDB.getProgress();
-    progress.cardsSeen = (progress.cardsSeen || 0) + 1;
-    await DevHubDB.saveProgress(progress);
-    await loadProgress();
+  document.getElementById('flashcard').addEventListener('click', onFlip);
+  document.getElementById('flipCard').addEventListener('click', onFlip);
+
+  document.querySelectorAll('.rating-btn').forEach(btn => {
+    btn.addEventListener('click', () => rateCard(parseInt(btn.dataset.quality)));
   });
 
-  document.getElementById('card-filter').addEventListener('change', (e) => {
-    const cat = e.target.value;
-    filteredCards = cat === 'all' ? [...FLASHCARDS] : FLASHCARDS.filter(c => c.category === cat);
+  document.getElementById('card-filter').addEventListener('change', async (e) => {
+    dueCards = await buildDueCards(e.target.value);
     currentCardIndex = 0;
+    document.getElementById('card-total').textContent = dueCards.length;
     showCard(0);
-    document.querySelector('.card-counter').innerHTML = `Card <span id="card-num">1</span> of ${filteredCards.length}`;
   });
 }
 
 function showCard(index) {
-  if (!filteredCards.length) return;
-  const card = filteredCards[index];
+  if (!dueCards.length) return;
+  const card = dueCards[index];
+
   document.getElementById('card-num').textContent = index + 1;
   document.getElementById('card-category').textContent = card.category;
   document.getElementById('card-term').textContent = card.term;
   document.getElementById('card-answer').textContent = card.answer;
   document.getElementById('flashcard').classList.remove('flipped');
+  document.getElementById('srs-rating').classList.add('hidden');
+  document.getElementById('card-controls').classList.remove('hidden');
+  document.getElementById('next-interval').textContent = '';
 }
 
-function flipCard() {
-  document.getElementById('flashcard').classList.toggle('flipped');
+function onFlip() {
+  const cardEl = document.getElementById('flashcard');
+  cardEl.classList.add('flipped');
+  document.getElementById('srs-rating').classList.remove('hidden');
+  document.getElementById('card-controls').classList.add('hidden');
+}
+
+async function rateCard(quality) {
+  const card = dueCards[currentCardIndex];
+  if (!card) return;
+
+  // Run SM-2 algorithm
+  const updatedSRS = SRS.review(card.srs, quality);
+  await DevHubDB.saveCardSRS(updatedSRS);
+
+  // Update progress
+  const progress = await DevHubDB.getProgress();
+  progress.cardsSeen = (progress.cardsSeen || 0) + 1;
+  await DevHubDB.saveProgress(progress);
+  await loadProgress();
+
+  // Show next interval briefly
+  const intervalText = SRS.formatInterval(updatedSRS.interval);
+  document.getElementById('next-interval').textContent = `Next review: ${intervalText}`;
+
+  // Move to next card after a short delay
+  setTimeout(async () => {
+    // Remove current card from due list if it is no longer due
+    if (!SRS.isDue(updatedSRS)) {
+      dueCards.splice(currentCardIndex, 1);
+    } else {
+      // Keep it but update its srs data
+      dueCards[currentCardIndex].srs = updatedSRS;
+      currentCardIndex++;
+    }
+
+    if (currentCardIndex >= dueCards.length) {
+      currentCardIndex = 0;
+    }
+
+    if (dueCards.length === 0) {
+      // Rebuild to show remaining / all cards
+      const filter = document.getElementById('card-filter')?.value || 'all';
+      dueCards = await buildDueCards(filter);
+      currentCardIndex = 0;
+    }
+
+    document.getElementById('card-total').textContent = dueCards.length;
+    showCard(currentCardIndex);
+  }, 600);
 }
 
 // ========== Quizzes ==========
@@ -276,10 +346,8 @@ function renderQuizzesList() {
 function startQuiz(quizId) {
   currentQuiz = QUIZZES.find(q => q.id === quizId);
   if (!currentQuiz) return;
-
   currentQuestionIndex = 0;
   quizScore = 0;
-  quizAnswers = [];
   showQuestion();
 }
 
@@ -287,16 +355,15 @@ function showQuestion() {
   const container = document.getElementById('quizzes-container');
   const q = currentQuiz.questions[currentQuestionIndex];
   const total = currentQuiz.questions.length;
-  const progressPercent = ((currentQuestionIndex) / total) * 100;
+  const progressPercent = (currentQuestionIndex / total) * 100;
 
   container.innerHTML = `
     <button class="back-btn" id="quitQuiz">← Quit Quiz</button>
     <div class="quiz-progress-bar"><div class="quiz-progress-fill" style="width:${progressPercent}%"></div></div>
     <div class="question-meta">Question ${currentQuestionIndex + 1} of ${total}</div>
-    
     <div class="content-card">
       <h3 class="question-text">${q.question}</h3>
-      <div class="options" id="options">
+      <div class="options">
         ${q.options.map((opt, i) => `
           <div class="option" data-index="${i}">
             <span class="option-letter">${String.fromCharCode(65 + i)}</span>
@@ -310,7 +377,6 @@ function showQuestion() {
   `;
 
   document.getElementById('quitQuiz').addEventListener('click', renderQuizzesList);
-
   document.querySelectorAll('.option').forEach(opt => {
     opt.addEventListener('click', () => selectAnswer(parseInt(opt.dataset.index)));
   });
@@ -322,9 +388,7 @@ function selectAnswer(selectedIndex) {
   const feedback = document.getElementById('feedback');
   const nextBtn = document.getElementById('nextQuestion');
 
-  // Prevent multiple clicks
   options.forEach(o => o.style.pointerEvents = 'none');
-
   options[selectedIndex].classList.add(selectedIndex === q.correct ? 'correct' : 'wrong');
   options[q.correct].classList.add('correct');
 
@@ -339,14 +403,10 @@ function selectAnswer(selectedIndex) {
 
   feedback.classList.remove('hidden');
   nextBtn.classList.remove('hidden');
-
   nextBtn.onclick = () => {
     currentQuestionIndex++;
-    if (currentQuestionIndex < currentQuiz.questions.length) {
-      showQuestion();
-    } else {
-      showQuizResults();
-    }
+    if (currentQuestionIndex < currentQuiz.questions.length) showQuestion();
+    else showQuizResults();
   };
 }
 
@@ -355,7 +415,6 @@ async function showQuizResults() {
   const total = currentQuiz.questions.length;
   const percent = Math.round((quizScore / total) * 100);
 
-  // Save result
   await DevHubDB.saveQuizResult({
     quizId: currentQuiz.id,
     title: currentQuiz.title,
@@ -434,7 +493,6 @@ document.addEventListener('DOMContentLoaded', async () => {
   await initTheme();
   await loadProgress();
 
-  // Load JSON data
   FLASHCARDS = await loadJSON('./data/flashcards.json');
   QUIZZES = await loadJSON('./data/quizzes.json');
 

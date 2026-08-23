@@ -55,18 +55,9 @@
       <div class="progress-panel">
         <div class="section-title">📊 Your Progress</div>
         <div class="progress-stats">
-          <div class="stat-box">
-            <div class="stat-value" id="stat-chapters">0</div>
-            <div class="stat-label">Paths</div>
-          </div>
-          <div class="stat-box">
-            <div class="stat-value" id="stat-quizzes">0</div>
-            <div class="stat-label">Quizzes</div>
-          </div>
-          <div class="stat-box">
-            <div class="stat-value" id="stat-cards">0</div>
-            <div class="stat-label">Cards</div>
-          </div>
+          <div class="stat-box"><div class="stat-value" id="stat-chapters">0</div><div class="stat-label">Paths</div></div>
+          <div class="stat-box"><div class="stat-value" id="stat-quizzes">0</div><div class="stat-label">Quizzes</div></div>
+          <div class="stat-box"><div class="stat-value" id="stat-cards">0</div><div class="stat-label">Cards</div></div>
         </div>
         <div class="overall-bar"><div class="overall-fill" id="overall-fill" style="width:0%"></div></div>
         <div style="text-align:right;font-size:0.85rem;color:var(--text-muted)" id="percent-complete">0% complete</div>
@@ -83,47 +74,13 @@
       </div>
     </section>
 
-    <section class="page" id="page-paths">
-      <div id="paths-container">
-        <h2 class="section-title">📚 Learning Paths</h2>
-        <p class="empty-state">Loading paths...</p>
-      </div>
-    </section>
-
-    <section class="page" id="page-cards">
-      <div id="cards-container">
-        <h2 class="section-title">🃏 Study Cards</h2>
-        <p class="empty-state">Loading cards...</p>
-      </div>
-    </section>
-
-    <section class="page" id="page-quizzes">
-      <div id="quizzes-container">
-        <h2 class="section-title">❓ Interactive Quizzes</h2>
-        <p class="empty-state">Loading quizzes...</p>
-      </div>
-    </section>
-
-    <section class="page" id="page-labs">
-      <h2 class="section-title">🧪 Practical Labs</h2>
-      <p class="empty-state">Hands-on mini projects coming soon.</p>
-    </section>
-
-    <section class="page" id="page-challenges">
-      <h2 class="section-title">🎯 Coding Challenges</h2>
-      <p class="empty-state">Challenges coming soon.</p>
-    </section>
-
-    <section class="page" id="page-games">
-      <h2 class="section-title">🎮 Games & Puzzles</h2>
-      <p class="empty-state">Code games coming soon.</p>
-    </section>
-
-    <section class="page" id="page-notes">
-      <h2 class="section-title">📓 My Notes</h2>
-      <button class="btn btn-primary" id="newNoteBtn">+ New Note</button>
-      <div id="notes-list" class="empty-state">No notes yet. Create your first note!</div>
-    </section>
+    <section class="page" id="page-paths"><div id="paths-container"><h2 class="section-title">📚 Learning Paths</h2><p class="empty-state">Loading...</p></div></section>
+    <section class="page" id="page-cards"><div id="cards-container"><h2 class="section-title">🃏 Study Cards</h2><p class="empty-state">Loading...</p></div></section>
+    <section class="page" id="page-quizzes"><div id="quizzes-container"><h2 class="section-title">❓ Quizzes</h2><p class="empty-state">Loading...</p></div></section>
+    <section class="page" id="page-labs"><h2 class="section-title">🧪 Practical Labs</h2><p class="empty-state">Coming soon.</p></section>
+    <section class="page" id="page-challenges"><h2 class="section-title">🎯 Challenges</h2><p class="empty-state">Coming soon.</p></section>
+    <section class="page" id="page-games"><h2 class="section-title">🎮 Games</h2><p class="empty-state">Coming soon.</p></section>
+    <section class="page" id="page-notes"><h2 class="section-title">📓 My Notes</h2><button class="btn btn-primary" id="newNoteBtn">+ New Note</button><div id="notes-list" class="empty-state">No notes yet.</div></section>
   </main>
 
   <nav class="bottom-nav">
@@ -140,6 +97,7 @@
   </div>
 
   <script src="db.js"></script>
+  <script src="srs.js"></script>
   <script src="data/paths.js"></script>
   <script src="app.js"></script>
 </body>
