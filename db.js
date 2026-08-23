@@ -1,5 +1,5 @@
 /* Professor Dev Hub - IndexedDB Wrapper
-   Handles progress, notes, quiz history, and flashcard SRS data
+   Progress, notes, quiz results, and flashcard SRS state
 */
 
 const DB_NAME = 'ProfessorDevHub';
@@ -19,33 +19,29 @@ function openDB() {
     request.onupgradeneeded = (event) => {
       const db = event.target.result;
 
-      // Progress store
       if (!db.objectStoreNames.contains('progress')) {
         const progressStore = db.createObjectStore('progress', { keyPath: 'id' });
         progressStore.createIndex('updatedAt', 'updatedAt', { unique: false });
       }
 
-      // Notes store
       if (!db.objectStoreNames.contains('notes')) {
         const notesStore = db.createObjectStore('notes', { keyPath: 'id', autoIncrement: true });
         notesStore.createIndex('createdAt', 'createdAt', { unique: false });
         notesStore.createIndex('title', 'title', { unique: false });
       }
 
-      // Quiz results
       if (!db.objectStoreNames.contains('quizResults')) {
         const quizStore = db.createObjectStore('quizResults', { keyPath: 'id', autoIncrement: true });
         quizStore.createIndex('topic', 'topic', { unique: false });
         quizStore.createIndex('date', 'date', { unique: false });
       }
 
-      // Flashcard SRS state
+      // SRS state for each flashcard
       if (!db.objectStoreNames.contains('flashcards')) {
         const cardStore = db.createObjectStore('flashcards', { keyPath: 'id' });
         cardStore.createIndex('nextReview', 'nextReview', { unique: false });
       }
 
-      // Settings / meta
       if (!db.objectStoreNames.contains('settings')) {
         db.createObjectStore('settings', { keyPath: 'key' });
       }
@@ -55,13 +51,11 @@ function openDB() {
   return dbPromise;
 }
 
-// Generic helpers
 async function get(storeName, key) {
   const db = await openDB();
   return new Promise((resolve, reject) => {
     const tx = db.transaction(storeName, 'readonly');
-    const store = tx.objectStore(storeName);
-    const request = store.get(key);
+    const request = tx.objectStore(storeName).get(key);
     request.onsuccess = () => resolve(request.result);
     request.onerror = () => reject(request.error);
   });
@@ -71,8 +65,7 @@ async function put(storeName, value) {
   const db = await openDB();
   return new Promise((resolve, reject) => {
     const tx = db.transaction(storeName, 'readwrite');
-    const store = tx.objectStore(storeName);
-    const request = store.put(value);
+    const request = tx.objectStore(storeName).put(value);
     request.onsuccess = () => resolve(request.result);
     request.onerror = () => reject(request.error);
   });
@@ -82,8 +75,7 @@ async function getAll(storeName) {
   const db = await openDB();
   return new Promise((resolve, reject) => {
     const tx = db.transaction(storeName, 'readonly');
-    const store = tx.objectStore(storeName);
-    const request = store.getAll();
+    const request = tx.objectStore(storeName).getAll();
     request.onsuccess = () => resolve(request.result);
     request.onerror = () => reject(request.error);
   });
@@ -93,16 +85,13 @@ async function remove(storeName, key) {
   const db = await openDB();
   return new Promise((resolve, reject) => {
     const tx = db.transaction(storeName, 'readwrite');
-    const store = tx.objectStore(storeName);
-    const request = store.delete(key);
+    const request = tx.objectStore(storeName).delete(key);
     request.onsuccess = () => resolve();
     request.onerror = () => reject(request.error);
   });
 }
 
-// Public API
 const DevHubDB = {
-  // Progress
   async getProgress() {
     return (await get('progress', 'main')) || {
       id: 'main',
@@ -121,10 +110,7 @@ const DevHubDB = {
     return put('progress', data);
   },
 
-  // Notes
-  async getNotes() {
-    return getAll('notes');
-  },
+  async getNotes() { return getAll('notes'); },
 
   async saveNote(note) {
     if (!note.createdAt) note.createdAt = Date.now();
@@ -132,21 +118,39 @@ const DevHubDB = {
     return put('notes', note);
   },
 
-  async deleteNote(id) {
-    return remove('notes', id);
-  },
+  async deleteNote(id) { return remove('notes', id); },
 
-  // Quiz results
   async saveQuizResult(result) {
     result.date = Date.now();
     return put('quizResults', result);
   },
 
-  async getQuizResults() {
-    return getAll('quizResults');
+  async getQuizResults() { return getAll('quizResults'); },
+
+  // ===== Spaced Repetition (SRS) =====
+  async getCardSRS(cardId) {
+    const existing = await get('flashcards', cardId);
+    if (existing) return existing;
+
+    // Default new card state
+    return {
+      id: cardId,
+      easeFactor: 2.5,
+      interval: 0,          // days
+      repetitions: 0,
+      nextReview: Date.now(), // due immediately
+      lastReviewed: null
+    };
   },
 
-  // Settings
+  async saveCardSRS(srsData) {
+    return put('flashcards', srsData);
+  },
+
+  async getAllCardSRS() {
+    return getAll('flashcards');
+  },
+
   async getSetting(key) {
     const item = await get('settings', key);
     return item ? item.value : null;
@@ -157,5 +161,4 @@ const DevHubDB = {
   }
 };
 
-// Make available globally
 window.DevHubDB = DevHubDB;
