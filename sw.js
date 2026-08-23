@@ -1,6 +1,6 @@
 /* Professor Dev Hub - Service Worker */
 
-const CACHE_VERSION = 'dev-hub-v1.2.0';
+const CACHE_VERSION = 'dev-hub-v1.3.0';
 const CACHE_NAME = `professor-dev-hub-${CACHE_VERSION}`;
 
 const PRECACHE_URLS = [
@@ -9,6 +9,7 @@ const PRECACHE_URLS = [
   './manifest.webmanifest',
   './sw.js',
   './db.js',
+  './srs.js',
   './app.js',
   './styles.css',
   './data/paths.js',
