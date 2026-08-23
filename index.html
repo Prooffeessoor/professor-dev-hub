@@ -4,14 +4,14 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <meta name="theme-color" content="#6366f1" />
-  <meta name="description" content="Professor Dev Hub – Interactive App Development, Web Design, Python, API & C# Learning Platform" />
+  <meta name="description" content="Professor Dev Hub – App Development, Web Design, Python, API & C# Learning PWA" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <meta name="apple-mobile-web-app-title" content="Dev Hub" />
   <link rel="manifest" href="manifest.webmanifest" />
   <link rel="apple-touch-icon" href="icon-192.svg" />
   <link rel="icon" type="image/svg+xml" href="icon-192.svg" />
-  <title>Professor Dev Hub | App Development & Web Design</title>
+  <title>Professor Dev Hub</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -19,22 +19,16 @@
 </head>
 <body>
   <header class="header">
-    <button class="menu-btn" id="menuBtn" aria-label="Open menu">☰</button>
-    <div class="logo">
-      <span class="logo-icon">💻</span>
-      <span>Professor Dev Hub</span>
-    </div>
+    <button class="menu-btn" id="menuBtn" aria-label="Menu">☰</button>
+    <div class="logo"><span class="logo-icon">💻</span><span>Professor Dev Hub</span></div>
     <div class="header-actions">
       <button class="btn btn-sm install-btn hidden" id="installBtn">⬇ Install</button>
-      <button class="icon-btn" id="themeBtn" aria-label="Toggle theme">🌙</button>
+      <button class="icon-btn" id="themeBtn" aria-label="Theme">🌙</button>
     </div>
   </header>
 
   <aside class="sidebar" id="sidebar">
-    <div class="sidebar-header">
-      <span>Menu</span>
-      <button class="close-btn" id="closeSidebar">✕</button>
-    </div>
+    <div class="sidebar-header"><span>Menu</span><button class="close-btn" id="closeSidebar">✕</button></div>
     <nav class="nav-list">
       <button class="nav-link active" data-page="home">🏠 Home</button>
       <button class="nav-link" data-page="paths">📚 Learning Paths</button>
@@ -48,13 +42,12 @@
   </aside>
   <div class="overlay" id="overlay"></div>
 
-  <main class="main" id="main">
+  <main class="main">
     <section class="page active" id="page-home">
       <div class="hero">
         <h1>Welcome, Future Developer!</h1>
-        <p>Master web design, Python, APIs, C# and more — offline-ready on any device.</p>
+        <p>Paths, labs, challenges & games — offline-ready on any device.</p>
       </div>
-
       <div class="progress-panel">
         <div class="section-title">📊 Your Progress</div>
         <div class="progress-stats">
@@ -66,7 +59,6 @@
         <div style="text-align:right;font-size:0.85rem;color:var(--text-muted)" id="percent-complete">0% complete</div>
         <div class="streak-badge" id="streak-badge" style="margin-top:0.75rem;display:inline-block">🔥 0 day streak</div>
       </div>
-
       <div class="feature-grid">
         <div class="feature-card" data-page="paths"><div class="feature-icon">📚</div><div>Learning Paths</div></div>
         <div class="feature-card" data-page="cards"><div class="feature-icon">🃏</div><div>Study Cards</div></div>
@@ -77,20 +69,20 @@
       </div>
     </section>
 
-    <section class="page" id="page-paths"><div id="paths-container"><p class="empty-state">Loading paths...</p></div></section>
-    <section class="page" id="page-cards"><div id="cards-container"><p class="empty-state">Loading cards...</p></div></section>
-    <section class="page" id="page-quizzes"><div id="quizzes-container"><p class="empty-state">Loading quizzes...</p></div></section>
-    <section class="page" id="page-labs"><h2 class="section-title">🧪 Practical Labs</h2><p class="empty-state">Hands-on mini projects coming soon.</p></section>
-    <section class="page" id="page-challenges"><h2 class="section-title">🎯 Challenges</h2><p class="empty-state">Coding challenges coming soon.</p></section>
-    <section class="page" id="page-games"><h2 class="section-title">🎮 Games</h2><p class="empty-state">Code games coming soon.</p></section>
+    <section class="page" id="page-paths"><div id="paths-container"><p class="empty-state">Loading...</p></div></section>
+    <section class="page" id="page-cards"><div id="cards-container"><p class="empty-state">Loading...</p></div></section>
+    <section class="page" id="page-quizzes"><div id="quizzes-container"><p class="empty-state">Loading...</p></div></section>
+    <section class="page" id="page-labs"><div id="labs-container"><p class="empty-state">Loading labs...</p></div></section>
+    <section class="page" id="page-challenges"><div id="challenges-container"><p class="empty-state">Loading challenges...</p></div></section>
+    <section class="page" id="page-games"><div id="games-container"><p class="empty-state">Loading games...</p></div></section>
     <section class="page" id="page-notes"><h2 class="section-title">📓 My Notes</h2><button class="btn btn-primary" id="newNoteBtn">+ New Note</button><div id="notes-list" class="empty-state">No notes yet.</div></section>
   </main>
 
   <nav class="bottom-nav">
     <button class="bottom-nav-item active" data-page="home">🏠<span>Home</span></button>
     <button class="bottom-nav-item" data-page="paths">📚<span>Paths</span></button>
-    <button class="bottom-nav-item" data-page="quizzes">❓<span>Quizzes</span></button>
-    <button class="bottom-nav-item" data-page="notes">📓<span>Notes</span></button>
+    <button class="bottom-nav-item" data-page="labs">🧪<span>Labs</span></button>
+    <button class="bottom-nav-item" data-page="games">🎮<span>Games</span></button>
   </nav>
 
   <div class="sw-banner offline" id="offline-banner">📡 You are offline. Cached content is still available.</div>
