@@ -1,92 +1,30 @@
 [
-  {
-    "id": "html-1",
-    "category": "HTML",
-    "term": "What does HTML stand for?",
-    "answer": "HyperText Markup Language"
-  },
-  {
-    "id": "html-2",
-    "category": "HTML",
-    "term": "Which tag creates a hyperlink?",
-    "answer": "<a> (anchor tag)"
-  },
-  {
-    "id": "html-3",
-    "category": "HTML",
-    "term": "What is the purpose of the <alt> attribute on images?",
-    "answer": "Provides alternative text for accessibility and when the image cannot be displayed"
-  },
-  {
-    "id": "html-4",
-    "category": "HTML",
-    "term": "Name three semantic HTML elements",
-    "answer": "<header>, <nav>, <main>, <section>, <article>, <footer>, <aside>"
-  },
-  {
-    "id": "html-5",
-    "category": "HTML",
-    "term": "What is the difference between <div> and <span>?",
-    "answer": "<div> is a block-level container, <span> is an inline container"
-  },
-  {
-    "id": "css-1",
-    "category": "CSS",
-    "term": "What does CSS stand for?",
-    "answer": "Cascading Style Sheets"
-  },
-  {
-    "id": "css-2",
-    "category": "CSS",
-    "term": "What are the four parts of the CSS Box Model?",
-    "answer": "Content, Padding, Border, Margin"
-  },
-  {
-    "id": "css-3",
-    "category": "CSS",
-    "term": "Which property makes an element a flex container?",
-    "answer": "display: flex;"
-  },
-  {
-    "id": "css-4",
-    "category": "CSS",
-    "term": "What does justify-content control in Flexbox?",
-    "answer": "Alignment of items along the main axis"
-  },
-  {
-    "id": "css-5",
-    "category": "CSS",
-    "term": "What is the recommended global box-sizing value?",
-    "answer": "box-sizing: border-box;"
-  },
-  {
-    "id": "css-6",
-    "category": "CSS",
-    "term": "How do you create a 3-column equal-width grid?",
-    "answer": "display: grid; grid-template-columns: repeat(3, 1fr);"
-  },
-  {
-    "id": "js-1",
-    "category": "JavaScript",
-    "term": "How do you declare a constant in modern JavaScript?",
-    "answer": "const variableName = value;"
-  },
-  {
-    "id": "js-2",
-    "category": "JavaScript",
-    "term": "What does DOM stand for?",
-    "answer": "Document Object Model"
-  },
-  {
-    "id": "js-3",
-    "category": "JavaScript",
-    "term": "Which method selects an element by its ID?",
-    "answer": "document.getElementById('id')"
-  },
-  {
-    "id": "js-4",
-    "category": "JavaScript",
-    "term": "What is the difference between == and ===?",
-    "answer": "== compares value with type coercion, === compares value and type strictly"
-  }
+  {"id": "html-1", "category": "HTML", "term": "What does HTML stand for?", "answer": "HyperText Markup Language"},
+  {"id": "html-2", "category": "HTML", "term": "Which tag creates a hyperlink?", "answer": "<a> (anchor tag)"},
+  {"id": "html-3", "category": "HTML", "term": "Purpose of the alt attribute on images?", "answer": "Alternative text for accessibility and when the image cannot load"},
+  {"id": "html-4", "category": "HTML", "term": "Name three semantic HTML elements", "answer": "<header>, <nav>, <main>, <section>, <article>, <footer>"},
+  {"id": "html-5", "category": "HTML", "term": "Difference between <div> and <span>?", "answer": "<div> is block-level; <span> is inline"},
+  {"id": "css-1", "category": "CSS", "term": "What does CSS stand for?", "answer": "Cascading Style Sheets"},
+  {"id": "css-2", "category": "CSS", "term": "Four parts of the CSS Box Model?", "answer": "Content, Padding, Border, Margin"},
+  {"id": "css-3", "category": "CSS", "term": "Property that creates a flex container?", "answer": "display: flex;"},
+  {"id": "css-4", "category": "CSS", "term": "What does justify-content control?", "answer": "Alignment of items along the main axis"},
+  {"id": "css-5", "category": "CSS", "term": "Recommended global box-sizing value?", "answer": "box-sizing: border-box;"},
+  {"id": "css-6", "category": "CSS", "term": "How to create a 3-column equal grid?", "answer": "display: grid; grid-template-columns: repeat(3, 1fr);"},
+  {"id": "js-1", "category": "JavaScript", "term": "How do you declare a constant?", "answer": "const variableName = value;"},
+  {"id": "js-2", "category": "JavaScript", "term": "What does DOM stand for?", "answer": "Document Object Model"},
+  {"id": "js-3", "category": "JavaScript", "term": "Method to select an element by ID?", "answer": "document.getElementById('id')"},
+  {"id": "js-4", "category": "JavaScript", "term": "Difference between == and ===?", "answer": "== coerces types; === compares value and type strictly"},
+  {"id": "py-1", "category": "Python", "term": "How do you print text in Python?", "answer": "print(\"Hello\")"},
+  {"id": "py-2", "category": "Python", "term": "How do you define a function?", "answer": "def function_name(params):"},
+  {"id": "py-3", "category": "Python", "term": "What is a dictionary in Python?", "answer": "A key-value collection, written with { }"},
+  {"id": "py-4", "category": "Python", "term": "How do you convert a dict to JSON string?", "answer": "json.dumps(data)"},
+  {"id": "py-5", "category": "Python", "term": "What does if __name__ == \"__main__\": do?", "answer": "Runs code only when the file is executed directly, not when imported"},
+  {"id": "api-1", "category": "API", "term": "What does API stand for?", "answer": "Application Programming Interface"},
+  {"id": "api-2", "category": "API", "term": "HTTP method to retrieve data?", "answer": "GET"},
+  {"id": "api-3", "category": "API", "term": "HTTP method to create a new resource?", "answer": "POST"},
+  {"id": "api-4", "category": "API", "term": "Typical success status for a created resource?", "answer": "201 Created"},
+  {"id": "api-5", "category": "API", "term": "How do you send JSON with fetch POST?", "answer": "headers: { Content-Type: application/json }, body: JSON.stringify(data)"},
+  {"id": "cs-1", "category": "C#", "term": "How do you write to the console in C#?", "answer": "Console.WriteLine(\"text\");"},
+  {"id": "cs-2", "category": "C#", "term": "Keyword for a method that returns nothing?", "answer": "void"},
+  {"id": "cs-3", "category": "C#", "term": "What does var do in C#?", "answer": "Lets the compiler infer the variable type"}
 ]

@@ -4,41 +4,11 @@
     "title": "HTML Basics",
     "icon": "📄",
     "questions": [
-      {
-        "question": "What does HTML stand for?",
-        "options": [
-          "HyperText Markup Language",
-          "High Tech Modern Language",
-          "Hyper Transfer Markup Language",
-          "Home Tool Markup Language"
-        ],
-        "correct": 0,
-        "explanation": "HTML stands for HyperText Markup Language — the standard language for creating web pages."
-      },
-      {
-        "question": "Which tag is used to create a hyperlink?",
-        "options": ["<link>", "<a>", "<href>", "<url>"],
-        "correct": 1,
-        "explanation": "The <a> (anchor) tag is used to create hyperlinks."
-      },
-      {
-        "question": "Which of these is a semantic HTML element?",
-        "options": ["<div>", "<span>", "<article>", "<b>"],
-        "correct": 2,
-        "explanation": "<article> is semantic — it clearly describes its content. <div> and <span> are generic."
-      },
-      {
-        "question": "What attribute provides alternative text for an image?",
-        "options": ["title", "alt", "src", "description"],
-        "correct": 1,
-        "explanation": "The alt attribute provides alternative text for accessibility and when images fail to load."
-      },
-      {
-        "question": "Which tag contains the visible content of a webpage?",
-        "options": ["<head>", "<body>", "<html>", "<meta>"],
-        "correct": 1,
-        "explanation": "The <body> tag contains all the visible content of the webpage."
-      }
+      {"question": "What does HTML stand for?", "options": ["HyperText Markup Language", "High Tech Modern Language", "Hyper Transfer Markup Language", "Home Tool Markup Language"], "correct": 0, "explanation": "HTML = HyperText Markup Language."},
+      {"question": "Which tag creates a hyperlink?", "options": ["<link>", "<a>", "<href>", "<url>"], "correct": 1, "explanation": "The <a> (anchor) tag creates links."},
+      {"question": "Which is a semantic HTML element?", "options": ["<div>", "<span>", "<article>", "<b>"], "correct": 2, "explanation": "<article> clearly describes its content."},
+      {"question": "Attribute for alternative image text?", "options": ["title", "alt", "src", "description"], "correct": 1, "explanation": "alt provides accessible alternative text."},
+      {"question": "Where does visible page content go?", "options": ["<head>", "<body>", "<html>", "<meta>"], "correct": 1, "explanation": "Visible content lives in <body>."}
     ]
   },
   {
@@ -46,97 +16,46 @@
     "title": "CSS Basics",
     "icon": "🎨",
     "questions": [
-      {
-        "question": "What does CSS stand for?",
-        "options": [
-          "Computer Style Sheets",
-          "Cascading Style Sheets",
-          "Creative Style System",
-          "Colorful Style Sheets"
-        ],
-        "correct": 1,
-        "explanation": "CSS stands for Cascading Style Sheets."
-      },
-      {
-        "question": "Which property is used to change text color?",
-        "options": ["font-color", "text-color", "color", "foreground"],
-        "correct": 2,
-        "explanation": "The color property sets the text color."
-      },
-      {
-        "question": "What are the four parts of the CSS Box Model (from inside out)?",
-        "options": [
-          "Margin, Border, Padding, Content",
-          "Content, Padding, Border, Margin",
-          "Border, Margin, Padding, Content",
-          "Padding, Content, Margin, Border"
-        ],
-        "correct": 1,
-        "explanation": "The correct order is Content → Padding → Border → Margin."
-      },
-      {
-        "question": "Which value of display creates a flex container?",
-        "options": ["block", "inline", "flex", "grid"],
-        "correct": 2,
-        "explanation": "display: flex; turns an element into a flex container."
-      },
-      {
-        "question": "What does justify-content control in Flexbox?",
-        "options": [
-          "Alignment on the cross axis",
-          "Alignment on the main axis",
-          "The direction of flex items",
-          "The size of flex items"
-        ],
-        "correct": 1,
-        "explanation": "justify-content aligns items along the main axis."
-      }
+      {"question": "What does CSS stand for?", "options": ["Computer Style Sheets", "Cascading Style Sheets", "Creative Style System", "Colorful Style Sheets"], "correct": 1, "explanation": "CSS = Cascading Style Sheets."},
+      {"question": "Property for text color?", "options": ["font-color", "text-color", "color", "foreground"], "correct": 2, "explanation": "Use the color property."},
+      {"question": "Box model order (inside → out)?", "options": ["Margin, Border, Padding, Content", "Content, Padding, Border, Margin", "Border, Margin, Padding, Content", "Padding, Content, Margin, Border"], "correct": 1, "explanation": "Content → Padding → Border → Margin."},
+      {"question": "Value that creates a flex container?", "options": ["block", "inline", "flex", "grid"], "correct": 2, "explanation": "display: flex;"},
+      {"question": "What does justify-content control?", "options": ["Cross axis alignment", "Main axis alignment", "Flex direction", "Item size"], "correct": 1, "explanation": "justify-content aligns on the main axis."}
     ]
   },
   {
-    "id": "js-intro",
-    "title": "JavaScript Intro",
-    "icon": "⚡",
+    "id": "python-basics",
+    "title": "Python Basics",
+    "icon": "🐍",
     "questions": [
-      {
-        "question": "How do you declare a constant in modern JavaScript?",
-        "options": ["var x = 5;", "let x = 5;", "const x = 5;", "constant x = 5;"],
-        "correct": 2,
-        "explanation": "const is used to declare constants that cannot be reassigned."
-      },
-      {
-        "question": "What does DOM stand for?",
-        "options": [
-          "Document Object Model",
-          "Data Object Management",
-          "Digital Ordinance Model",
-          "Document Orientation Mode"
-        ],
-        "correct": 0,
-        "explanation": "DOM stands for Document Object Model — the programming interface for HTML documents."
-      },
-      {
-        "question": "Which method selects an element by its ID?",
-        "options": [
-          "document.querySelector('#id')",
-          "document.getElementById('id')",
-          "Both of the above",
-          "document.getElement('id')"
-        ],
-        "correct": 2,
-        "explanation": "Both getElementById and querySelector('#id') can select an element by ID."
-      },
-      {
-        "question": "What is the difference between == and ===?",
-        "options": [
-          "No difference",
-          "== is strict, === is loose",
-          "== compares value only (with coercion), === compares value and type",
-          "=== is deprecated"
-        ],
-        "correct": 2,
-        "explanation": "=== is the strict equality operator — it checks both value and type without coercion."
-      }
+      {"question": "How do you print in Python?", "options": ["echo(\"Hi\")", "print(\"Hi\")", "Console.WriteLine(\"Hi\")", "System.out.println(\"Hi\")"], "correct": 1, "explanation": "Python uses print()."},
+      {"question": "Keyword to define a function?", "options": ["function", "func", "def", "method"], "correct": 2, "explanation": "Use def function_name():"},
+      {"question": "Which creates a dictionary?", "options": ["[1, 2, 3]", "{ \"a\": 1 }", "(1, 2)", "{1, 2, 3}"], "correct": 1, "explanation": "Dicts use key: value pairs in braces."},
+      {"question": "Module for JSON in Python?", "options": ["json", "http", "requests", "pickle"], "correct": 0, "explanation": "The built-in json module handles JSON."},
+      {"question": "What does range(3) produce?", "options": ["1, 2, 3", "0, 1, 2", "0, 1, 2, 3", "3, 2, 1"], "correct": 1, "explanation": "range(3) → 0, 1, 2."}
+    ]
+  },
+  {
+    "id": "api-basics",
+    "title": "API Basics",
+    "icon": "🔌",
+    "questions": [
+      {"question": "What does API stand for?", "options": ["Application Programming Interface", "Advanced Program Integration", "Automated Process Interface", "App Protocol Input"], "correct": 0, "explanation": "API = Application Programming Interface."},
+      {"question": "HTTP method to fetch data?", "options": ["POST", "GET", "PUT", "DELETE"], "correct": 1, "explanation": "GET retrieves resources."},
+      {"question": "Status code for successful creation?", "options": ["200", "201", "204", "400"], "correct": 1, "explanation": "201 Created is used when a resource is created."},
+      {"question": "How do you parse JSON from fetch?", "options": ["res.text()", "res.json()", "res.parse()", "JSON.parse(res)"], "correct": 1, "explanation": "await res.json() parses the body."},
+      {"question": "REST resource URL for user id 42?", "options": ["/api/getUser/42", "/api/users/42", "/api/user?id=42", "/users-42"], "correct": 1, "explanation": "REST prefers /api/users/42."}
+    ]
+  },
+  {
+    "id": "csharp-basics",
+    "title": "C# Basics",
+    "icon": "💠",
+    "questions": [
+      {"question": "How do you print in C#?", "options": ["print(\"Hi\")", "Console.WriteLine(\"Hi\");", "echo Hi", "System.out.println(\"Hi\")"], "correct": 1, "explanation": "Use Console.WriteLine."},
+      {"question": "Keyword for no return value?", "options": ["null", "void", "empty", "none"], "correct": 1, "explanation": "void means the method returns nothing."},
+      {"question": "What does var do?", "options": ["Makes a constant", "Infers the type", "Creates a dynamic object", "Declares a string only"], "correct": 1, "explanation": "var lets the compiler infer the type."},
+      {"question": "C# is mainly associated with which platform?", "options": [".NET", "JVM", "Node.js", "Python runtime"], "correct": 0, "explanation": "C# runs on the .NET platform."}
     ]
   }
 ]
